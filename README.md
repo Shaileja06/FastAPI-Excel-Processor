@@ -1,142 +1,127 @@
 # FastAPI Excel Processor Assignment
 
-## Overview
+## Overview:
+This FastAPI application reads data from an Excel file (/Data/capbudg.xls) and exposes REST API endpoints to access and process the data. It demonstrates:
 
-This is a FastAPI application that reads data from an Excel sheet (`/Data/capbudg.xls`) and provides REST API endpoints to interact with the data.
+* API development using FastAPI
+* Excel processing with pandas
+* Modular design and error handling
+* Auto-generated documentation via FastAPI
 
-The project demonstrates:
-- API development using FastAPI
-- Excel processing using Pandas
-- Modular code design and error handling
-- Clear and professional API documentation
-
-## Setup Instructions
+## Setup Instructions:
 
 1. Clone the repository.
-2. Place the provided `capbudg.xls` file inside the `Data/` folder.
+2. Place the provided capbudg.xls file inside the Data/ folder.
 3. Install dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
+   pip install -r requirements.txt
 4. Run the API server:
-    ```bash
-    uvicorn app:app --host 0.0.0.0 --port 9090 --reload
-    ```
+   uvicorn app\:app --host 0.0.0.0 --port 9090 --reload
 
-## API Endpoints
+## API Endpoints:
+### Base URL: [http://localhost:9090](http://localhost:9090)
 
-Base URL: [http://localhost:9090](http://localhost:9090)
+#### 1️⃣ GET /list\_tables
 
----
-
-### 1️⃣ GET `/list_tables`
-
-- **Description:** Lists all table names (sheet names) in the Excel file.
-
-#### Example Request:
-```http
-GET http://localhost:9090/list_tables
-Example Response:
-json
-
-{
-  "tables": ["CapBudgWS"]
-}
-
-## 2️⃣ GET /get_table_details
-Description: Returns the row names (first column values) of the specified table.
-
-Query Parameter:
-
-table_name (required) → Name of the table (sheet name).
+Description: Returns all sheet names (tables) available in the Excel file.
 
 Example Request:
+GET [http://localhost:9090/list\_tables](http://localhost:9090/list_tables)
 
-GET http://localhost:9090/get_table_details?table_name=CapBudgWS
 Example Response:
-json
-
 {
-  "table_name": "CapBudgWS",
-  "row_names": [
-    "INITIAL INVESTMENT",
-    "Initial Investment=",
-    "Opportunity cost (if any)=",
-    "Lifetime of the investment",
-    "Salvage Value at end of project=",
-    "Deprec. method(1:St.line;2:DDB)=",
-    "Tax Credit (if any )=",
-    "Other invest.(non-depreciable)=",
-    ...
-  ]
+"tables": \["CapBudgWS"]
 }
-3️⃣ GET /row_sum
-Description: Returns the sum of all numerical values in the specified row of the given table.
+
+#### 2️⃣ GET /get\_table\_details
+
+Description: Returns all row names (first column values) of a given sheet/table.
 
 Query Parameters:
 
-table_name (required)
+* table\_name (required): Name of the sheet to inspect
 
-row_name (required)
+Example Request:
+GET [http://localhost:9090/get\_table\_details?table\_name=CapBudgWS](http://localhost:9090/get_table_details?table_name=CapBudgWS)
 
-Example 1: Request
-
-GET http://localhost:9090/row_sum?table_name=CapBudgWS&row_name=Tax%20Credit%20(if%20any%20)=
-Example 1: Response
-json
-
+Example Response:
+```
 {
-  "table_name": "CapBudgWS",
-  "row_name": "Tax Credit (if any )=",
-  "sum": 0.4
+"table\_name": "CapBudgWS",
+"row\_names": \[
+"INITIAL INVESTMENT",
+"Initial Investment=",
+"Opportunity cost (if any)=",
+"Lifetime of the investment",
+"Salvage Value at end of project=",
+"Deprec. method(1\:St.line;2\:DDB)=",
+"Tax Credit (if any )=",
+"Other invest.(non-depreciable)=",
+...
+]
 }
-Example 2: Request
+```
 
-GET http://localhost:9090/row_sum?table_name=CapBudgWS&row_name=Initial%20Investment=
-Example 2: Response
-json
+#### 3️⃣ GET /row\_sum
 
+Description: Returns the sum of all numeric values in a given row from the specified table.
+
+Query Parameters:
+
+* table\_name (required)
+* row\_name (required)
+
+Example Request 1:
+GET [http://localhost:9090/row\_sum?table\_name=CapBudgWS\&row\_name=Tax%20Credit%20(if%20any%20)=](http://localhost:9090/row_sum?table_name=CapBudgWS&row_name=Tax%20Credit%20%28if%20any%20%29=)
+
+Example Response 1:
+```
 {
-  "table_name": "CapBudgWS",
-  "row_name": "Initial Investment=",
-  "sum": 90002.0
+"table\_name": "CapBudgWS",
+"row\_name": "Tax Credit (if any )=",
+"sum": 0.4
 }
+```
+Example Request 2:
+GET [http://localhost:9090/row\_sum?table\_name=CapBudgWS\&row\_name=Initial%20Investment=](http://localhost:9090/row_sum?table_name=CapBudgWS&row_name=Initial%20Investment=)
 
-##My Approach on Units
-I return the pure numerical sum of all numeric columns for the specified row.
-Any units (such as % or $) present in string columns are ignored during the sum calculation.
+Example Response 2:
+```
+{
+"table\_name": "CapBudgWS",
+"row\_name": "Initial Investment=",
+"sum": 90002.0
+}
+```
 
-Potential Improvements
-Add support for additional file formats (.csv, .xlsx, .ods).
+#### Approach on Units:
+The sum includes only numeric values. Textual content like "%" or "\$" is ignored. Only clean numeric columns are summed.
 
-Allow dynamic Excel upload via API instead of fixed file path.
+Potential Improvements:
 
-Implement UI integration using React or Streamlit.
+* Support other formats like .csv, .xlsx, .ods
+* Enable dynamic Excel file upload via API
+* Add frontend (React/Streamlit)
+* Return units where available
+* Add logging for debugging
 
-Return units where relevant in the API output (optional enhancement).
+Known Limitations:
 
-Add logging for better debugging.
+* Empty Excel sheets not handled
+* Sheets with no numeric data
+* Mixed-type rows (e.g. strings like "10%") ignored
+* Duplicate row names (first match used)
 
-Missed Edge Cases
-Empty Excel sheets.
+Testing:
+A Postman collection is included: FastAPI\_Excel\_Processor.postman\_collection.json
 
-Tables with no numeric data.
+Usage:
 
-Rows with mixed data types (example: "10%" as a string will not be summed).
+* Import collection in Postman
+* Run /list\_tables, /get\_table\_details, and /row\_sum endpoints to test
 
-Duplicated row names (currently the first matching row is used).
-
-Testing
-To facilitate quick testing, a ready Postman collection is provided:
-
-👉 FastAPI_Excel_Processor.postman_collection.json
-
-How to use:
-Import the collection into Postman.
-
-Run each request (/list_tables, /get_table_details, /row_sum) to verify functionality.
-
-Author
+Author:
 Shaileja Patil
-Batch: B.Tech from Mumbai University 
+B.Tech - Mumbai University
 Course: AI & Data Science
+
+---
