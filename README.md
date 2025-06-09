@@ -120,8 +120,8 @@ Usage:
 * Run /list\_tables, /get\_table\_details, and /row\_sum endpoints to test
 
 Author:
-Shaileja Patil
-B.Tech - Mumbai University
+Shaileja Patil |
+B.Tech - Mumbai University |
 Course: AI & Data Science
 
 ---
