@@ -20,7 +20,7 @@ This FastAPI application reads data from an Excel file (/Data/capbudg.xls) and e
 ## API Endpoints:
 ### Base URL: [http://localhost:9090](http://localhost:9090)
 
-#### 1️⃣ GET /list\_tables
+#### 1️⃣ GET /list_tables
 
 Description: Returns all sheet names (tables) available in the Excel file.
 
@@ -29,16 +29,16 @@ GET [http://localhost:9090/list\_tables](http://localhost:9090/list_tables)
 
 Example Response:
 {
-"tables": \["CapBudgWS"]
+"tables": ["CapBudgWS"]
 }
 
-#### 2️⃣ GET /get\_table\_details
+#### 2️⃣ GET /get_table_details
 
 Description: Returns all row names (first column values) of a given sheet/table.
 
 Query Parameters:
 
-* table\_name (required): Name of the sheet to inspect
+* table_name (required): Name of the sheet to inspect
 
 Example Request:
 GET [http://localhost:9090/get\_table\_details?table\_name=CapBudgWS](http://localhost:9090/get_table_details?table_name=CapBudgWS)
@@ -46,8 +46,8 @@ GET [http://localhost:9090/get\_table\_details?table\_name=CapBudgWS](http://loc
 Example Response:
 ```
 {
-"table\_name": "CapBudgWS",
-"row\_names": \[
+"table_name": "CapBudgWS",
+"row_names": [
 "INITIAL INVESTMENT",
 "Initial Investment=",
 "Opportunity cost (if any)=",
@@ -56,19 +56,19 @@ Example Response:
 "Deprec. method(1\:St.line;2\:DDB)=",
 "Tax Credit (if any )=",
 "Other invest.(non-depreciable)=",
-...
+["INITIAL INVESTMENT","Initial Investment=","Opportunity cost (if any)=","Lifetime of the investment","Salvage Value at end of project=","Deprec. method(1:St.line;2:DDB)=","Tax Credit (if any )=","Other invest.(non-depreciable)=","WORKING CAPITAL","Initial Investment in Work. Cap=","Working Capital as % of Rev=","Salvageable fraction at end=","GROWTH RATES","Revenues","Fixed Expenses","Default: The fixed expense growth rate is set equal to the growth rate in revenues by default.","INITIAL INVESTMENT","Investment"," - Tax Credit","Net Investment"," + Working Cap"," + Opp. Cost"," + Other invest.","Initial Investment","SALVAGE VALUE","Equipment","Working Capital","OPERATING CASHFLOWS","Lifetime Index","Revenues"," -Var. Expenses"," - Fixed Expenses","EBITDA"," - Depreciation","EBIT"," -Tax","EBIT(1-t)"," + Depreciation"," - ∂ Work. Cap","NATCF","Discount Factor","Discounted CF","Book Value (beginning)","Depreciation","BV(ending)"]
 ]
 }
 ```
 
-#### 3️⃣ GET /row\_sum
+#### 3️⃣ GET /row_sum
 
 Description: Returns the sum of all numeric values in a given row from the specified table.
 
 Query Parameters:
 
-* table\_name (required)
-* row\_name (required)
+* table_name (required)
+* row_name (required)
 
 Example Request 1:
 GET [http://localhost:9090/row\_sum?table\_name=CapBudgWS\&row\_name=Tax%20Credit%20(if%20any%20)=](http://localhost:9090/row_sum?table_name=CapBudgWS&row_name=Tax%20Credit%20%28if%20any%20%29=)
@@ -76,8 +76,8 @@ GET [http://localhost:9090/row\_sum?table\_name=CapBudgWS\&row\_name=Tax%20Credi
 Example Response 1:
 ```
 {
-"table\_name": "CapBudgWS",
-"row\_name": "Tax Credit (if any )=",
+"table_name": "CapBudgWS",
+"row_name": "Tax Credit (if any )=",
 "sum": 0.4
 }
 ```
@@ -87,8 +87,8 @@ GET [http://localhost:9090/row\_sum?table\_name=CapBudgWS\&row\_name=Initial%20I
 Example Response 2:
 ```
 {
-"table\_name": "CapBudgWS",
-"row\_name": "Initial Investment=",
+"table_name": "CapBudgWS",
+"row_name": "Initial Investment=",
 "sum": 90002.0
 }
 ```
@@ -112,12 +112,12 @@ Known Limitations:
 * Duplicate row names (first match used)
 
 Testing:
-A Postman collection is included: FastAPI\_Excel\_Processor.postman\_collection.json
+A Postman collection is included: FastAPI_Excel_Processor.postman_collection.json
 
 Usage:
 
 * Import collection in Postman
-* Run /list\_tables, /get\_table\_details, and /row\_sum endpoints to test
+* Run /list_tables, /get_table_details, and /row_sum endpoints to test
 
 Author:
 Shaileja Patil |
